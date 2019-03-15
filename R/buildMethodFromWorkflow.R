@@ -7,6 +7,7 @@ buildMethodFromWorkflow.BenchDesign <- function(bd, steps.exclude=NULL, methods.
   for(n in names(bd@methods)){
     BDMethodList(bd)[[n]] <- NULL
   }
+  
   ##Add methods from workflow
   vecs <- c()
   steps <- names(attributes(bd)$Workflow)
