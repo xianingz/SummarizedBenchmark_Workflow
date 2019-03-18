@@ -1,4 +1,4 @@
-time_mem <- function() {
+time_mem <- function(code) {
   start_gc <- gc(reset = TRUE)
   start_mem <- show_bytes(sum(start_gc[, "used"] * c(node_size(), 8)))
   start_max <- show_bytes(sum(start_gc[, "max used"] * c(node_size(), 8)))
@@ -16,7 +16,7 @@ time_mem <- function() {
   
   mem_change <- show_bytes(end_mem - start_mem)
   mem_peak <- show_bytes(end_max - start_max)
-  time_change <- show_bytes(as.numeric(difftime(end_time, start_time, units = "mins")))
+  time_change <- as.numeric(difftime(end_time, start_time, units = "mins"))
   
   return(list(mem_change = mem_change, mem_peak = mem_peak, time_change = time_change))
 }
@@ -38,5 +38,5 @@ print.bytes <- function(x, digits = 3, ...) {
   formatted <- format(signif(x, digits = digits), big.mark = ",",
                       scientific = FALSE)
   
-  cat(formatted, " ", unit, "\n", sep = "")
+  cat(formatted, "\n", sep = "")
 }

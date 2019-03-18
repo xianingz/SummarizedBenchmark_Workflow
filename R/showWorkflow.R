@@ -13,7 +13,7 @@
       else
         cat("    ")
       for(ni in names(object[[i]])) {
-        cat(ni, ";", sep = "")
+        cat(ni, "; ", sep = "")
       }
       cat("\n")
       
