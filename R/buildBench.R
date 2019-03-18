@@ -250,7 +250,7 @@ buildBench <- function(bd, data = NULL, truthCols = NULL, ftCols = NULL, sortIDs
     df <- tidyBDMethod(bd, dat = bd@data@data, eval = TRUE)
     
     ## add time, memory change, memory peak to df
-    df$mem_change <- unlist(lapply(tms, `[[`, 1))
+    #df$mem_change <- unlist(lapply(tms, `[[`, 1))
     df$mem_peak <- unlist(lapply(tms, `[[`, 2))
     df$time_change <- unlist(lapply(tms, `[[`, 3))
     
@@ -425,3 +425,4 @@ eval2assay <- function(al, si, siv) {
     }
     return(alr)
 }
+
