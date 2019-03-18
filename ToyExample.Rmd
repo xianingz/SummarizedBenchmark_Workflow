@@ -1,0 +1,88 @@
+Test
+```{r}
+###The parameter that 
+data("tdat")
+##preprocessing functions
+pre1med <- function(data){
+  data$pval[data$test_statistic > median(data$test_statistic)] = 0.1
+  return(data)
+}
+
+pre2mean <- function(data){
+  data$pval[data$test_statistic > mean(data$test_statistic)] = 0.1
+  return(data)
+}
+
+pre3quant <- function(data){
+  data$pval[data$test_statistic > quantile(data$test_statistic)[[3]]] = 0.1
+  return(data)
+}
+
+##Second processing functions
+sec1med <- function(data,y){
+  data$pval[data$effect_size > median(data$effect_size)] = y
+  return(data)
+}
+
+sec2mean <- function(data,y){
+  data$pval[data$effect_size > mean(data$effect_size)] = y
+  return(data)
+}
+
+
+##Third step functions
+thd1ori <- function(data){
+  return(data$pval)
+}
+
+thd2t2 <- function(data){
+  return(data$pval)
+}
+```
+
+```{r}
+b <- BenchDesign(data = list(tdat = tdat))
+b <- initWorkflow(b, steps = c("First","Second","Third"))
+b <- b %>% 
+    addMethodToWorkflow(step = "First",
+              method_label = "pre1med",
+              func = pre1med,
+              params = rlang::quos(data = tdat, method="pre1med")) %>%
+    addMethodToWorkflow(step = "First",
+              method_label = "pre2mean",
+              func = pre2mean,
+              params = rlang::quos(data = tdat)) %>%
+    addMethodToWorkflow(step = "First",
+              method_label = "pre3quant",
+              func = pre3quant,
+              params = rlang::quos(data = tdat)) %>%
+    addMethodToWorkflow(step = "Second",
+              method_label = "sec1med",
+              func = sec1med,
+              params = rlang::quos(y=0.05)) %>%
+    addMethodToWorkflow(step = "Second",
+              method_label = "sec2mean",
+              func = sec2mean,
+              params = rlang::quos(y=0.05)) %>%
+    addMethodToWorkflow(step = "Third",
+              method_label = "thd1ori",
+              func = thd1ori,
+              params = rlang::quos()) %>%
+    addMethodToWorkflow(step = "Third",
+              method_label = "thd2t2",
+              func = thd2t2,
+              params = rlang::quos())
+```
+
+```{r}
+b <- buildMethodFromWorkflow(b)
+sb <- buildBench(b, truthCols = tdat$H)
+```
+
+```{r}
+bdm <- b@methods[[1]]
+expr <- rlang::quo((bdm@f)(!!! bdm@params))
+    ## first evaluate main function
+z <- rlang::eval_tidy(expr)
+```
+
