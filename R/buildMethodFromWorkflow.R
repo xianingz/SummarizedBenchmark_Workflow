@@ -44,8 +44,8 @@ buildMethodFromWorkflow.BenchDesign <- function(bd, methods=NULL, label=NULL,all
           params <- attributes(bd)$Workflow[[steps[[j]]]][[methods[j]]]@params
           expr <- rlang::quo((f)(!!! params))
           tgb <- eval_tidy(expr)
-          #show(tgb)
-          #cat("finish")
+          show(tgb)
+          cat("finish")
         }else if(j != num.steps){
           #bd@data@data[["TBG"]] <- 
           f <- attributes(bd)$Workflow[[steps[[j]]]][[methods[j]]]@f
@@ -76,6 +76,31 @@ buildMethodFromWorkflow.BenchDesign <- function(bd, methods=NULL, label=NULL,all
   }
   vecs <- mapply(seq,1,vecs)
   iterall <- do.call(expand.grid, vecs)
+  
+  ##define generic workflow function
+  wfl <- function(i){
+    tgb <- c()
+    for(j in c(1:num.steps)){
+      if(j ==1){
+        f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
+        params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
+        expr <- rlang::quo((f)(!!! params))
+        tgb <- eval_tidy(expr)
+      }else if(j != num.steps){
+        f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
+        params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
+        expr <- rlang::quo((f)(tgb,!!!params))
+        tgb <- eval_tidy(expr)
+      }else{
+        f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
+        params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
+        expr <- rlang::quo((f)(tgb,!!!params))
+        res <- eval_tidy(expr)
+        return(res)
+      }
+    }
+  }
+  
   for(i in c(1:dim(iterall)[1])){
     names <- c()
     params.list <- list()
@@ -85,40 +110,7 @@ buildMethodFromWorkflow.BenchDesign <- function(bd, methods=NULL, label=NULL,all
     }
     label = paste(names, collapse = "_")
     
-    wfl <- function(...){
-      #params.list <- list(...)
-      tgb <- c()
-      for(j in c(1:num.steps)){
-        if(j ==1){
-          #bd@data@data[["TBG"]] <- 
-          f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
-          #params <- params.list[[j]]
-          params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
-          expr <- rlang::quo((f)(!!! params))
-          tgb <- eval_tidy(expr)
-          #show(tgb)
-          #cat("finish")
-        }else if(j != num.steps){
-          #bd@data@data[["TBG"]] <- 
-          f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
-          #params <- params.list[[j]]
-          params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
-          expr <- rlang::quo((f)(tgb,!!!params))
-          tgb <- eval_tidy(expr)
-          #show(tgb)
-          #cat("finish")
-        }else{
-          f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
-          #params <- params.list[[j]]
-          params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
-          expr <- rlang::quo((f)(tgb,!!!params))
-          res <- eval_tidy(expr)
-          #show(res)
-          return(res)
-        }
-      }
-    }
-    bd <- addMethod(bd, label = label, func = wfl, params = rlang::quos())
+    bd <- addMethod(bd, label = label, func = wfl, params = rlang::quos(i=!!i))
   }
   return(bd)
 }
