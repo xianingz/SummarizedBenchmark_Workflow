@@ -1,4 +1,16 @@
-initWorkflow <- function(bd, label=NULL, steps) {
+#' initiate workfow with steps in BenchDesign object
+#' 
+#' @param bd BenchDesign object
+#' @param steps a vector with the name of the steps for the workfle
+#' 
+#' @return new BenchDesign object with workflow
+#' 
+#' @example 
+#' b <- initWorkflow(bd, steps=c("First","Second","Third))
+#' 
+#' @import SummarizedBenchmark
+#' @export
+initWorkflow <- function(bd, steps) {
   UseMethod("initWorkflow")
 }
 

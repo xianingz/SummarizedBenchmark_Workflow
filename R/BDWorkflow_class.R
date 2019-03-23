@@ -1,3 +1,10 @@
+#' BDWorkflow class
+#'
+#' Container for individual methods to be stored as part of
+#' a Workflow in the BenchDesign object.
+#'
+#' @importClassesFrom S4Vectors SimpleList
+#' @exportClass BDWorkflow
 setClass("BDWorkflow", contains =  "SimpleList")
 
 setValidity("BDWorkflow",

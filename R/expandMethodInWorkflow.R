@@ -1,5 +1,5 @@
 expandMethodInWorkflow <- function(bd, step, label, params, onlyone = NULL, .replace = FALSE, .overwrite = FALSE) {
-  UseMethod(expandMethodInWorkflow)
+  UseMethod("expandMethodInWorkflow")
 }
 
 expandMethodInWorkflow.BenchDesign <- function(bd, step, label, params, onlyone = NULL, .replace = FALSE, .overwrite = FALSE) {

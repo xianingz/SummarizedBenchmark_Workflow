@@ -1,3 +1,19 @@
+#' initiate workfow with steps in BenchDesign object
+#' 
+#' @param bd BenchDesign object
+#' @param step the name of the step that the method is added to
+#' @param method_label the name of the method
+#' @param func function of the method
+#' @param params parameter of the function
+#' @param post Optional post-processing function
+#' @param meta Optional meta-information
+#' 
+#' @return new BenchDesign object with the method added
+#' 
+#' @example 
+#' b <- addMethodToWorkflow(bd, steps="First",method_label=""))
+#' 
+#' @export
 addMethodToWorkflow <- function(bd, step, method_label, func, params = rlang::quos(), post=NULL, meta = NULL) {
   UseMethod("addMethodToWorkflow")
 }
