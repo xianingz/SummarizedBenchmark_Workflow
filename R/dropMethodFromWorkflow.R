@@ -1,3 +1,15 @@
+#' drop methods from workflow in BenchDesign object
+#' 
+#' @param bd BenchDesign object
+#' @param step the name of the step that the method is from
+#' @param method_label the name of the method that is to be dropped
+#' 
+#' @return new BenchDesign with methods built from workflow
+#' 
+#' @example 
+#' bd <- dropMethodFromWorkflow(bd, step="First", method_label="pvalue"))
+#' 
+#' @export
 dropMethodFromWorkflow <- function(bd, step, method_label) {
   UseMethod("dropMethodFromWorkflow")
 }

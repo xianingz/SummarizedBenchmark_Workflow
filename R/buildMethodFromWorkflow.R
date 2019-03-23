@@ -1,3 +1,17 @@
+#' build methods from workflow in BenchDesign object
+#' 
+#' @param bd BenchDesign object
+#' @param step.exclude the name of the step that should be excluded from building the methods
+#' @param method.exclude the name of the method that should be excluded from building the methods
+#' @param all use all steps and all methods in building workflow
+#' 
+#' @return new BenchDesign with methods built from workflow
+#' 
+#' @example 
+#' bd <- buildMethodFromWorkflow(bd))
+#' 
+#' @export
+
 buildMethodFromWorkflow <- function(bd, steps.exclude=NULL, methods.exclude=NULL,all=TRUE){
   UseMethod("buildMethodFromWorkflow")
 }
