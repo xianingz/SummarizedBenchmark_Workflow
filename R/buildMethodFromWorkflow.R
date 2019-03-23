@@ -84,8 +84,8 @@ buildMethodFromWorkflow.BenchDesign <- function(bd, methods=NULL, label=NULL,all
       if(j ==1){
         f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
         params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
-        expr <- rlang::quo((f)(!!! params))
-        tgb <- eval_tidy(expr)
+        expr <- rlang::quo((f)(!!!params))
+        tgb <- eval_tidy(expr, bd@data@data)
       }else if(j != num.steps){
         f <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@f
         params <- attributes(bd)$Workflow[[steps[[j]]]][[iterall[i,j]]]@params
