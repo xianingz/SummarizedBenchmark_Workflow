@@ -1,3 +1,16 @@
+#' expand methods in workflow
+#' 
+#' @param bd BenchDesign object
+#' @param step the name of the step that should be excluded from building the methods
+#' @param label the name of the method that should be excluded from building the methods
+#' @param params use all steps and all methods in building workflow
+#' 
+#' @return new BenchDesign with methods built from workflow
+#' 
+#' @example 
+#' bd <- expandMethodInWorkflow(bd)
+#' 
+#' @export
 expandMethodInWorkflow <- function(bd, step, label, params, onlyone = NULL, .replace = FALSE, .overwrite = FALSE) {
   UseMethod("expandMethodInWorkflow")
 }
