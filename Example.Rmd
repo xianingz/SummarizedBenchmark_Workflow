@@ -1,5 +1,6 @@
-Test
+Example
 ```{r}
+library(SummarizedBenchmark)
 ###The parameter that 
 data("tdat")
 ##preprocessing functions
@@ -77,12 +78,5 @@ b <- b %>%
 ```{r}
 b <- buildMethodFromWorkflow(b)
 sb <- buildBench(b, truthCols = tdat$H)
-```
-
-```{r}
-bdm <- b@methods[[1]]
-expr <- rlang::quo((bdm@f)(!!! bdm@params))
-    ## first evaluate main function
-z <- rlang::eval_tidy(expr)
 ```
 
